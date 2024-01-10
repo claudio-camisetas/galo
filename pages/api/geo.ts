@@ -8,7 +8,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-    const responseData = await fetch('http://ip-api.com/json/')
-    const responseJson = await responseData.json()
-    res.status(200).json(responseJson)
+    if (req.method === 'POST') {
+        const responseData = await fetch(`http://ip-api.com/json/${req.body.ip}`)
+        const responseJson = await responseData.json()
+        res.status(200).json(responseJson)
+    }
 }
